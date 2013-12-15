@@ -1,0 +1,114 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >    
+    
+    <FrameLayout android:id="@+id/progressview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone">
+        <LinearLayout
+	        android:layout_width="match_parent"
+	    	android:layout_height="match_parent"
+	    	android:orientation="vertical" 
+	    	android:gravity="center">
+	        <ProgressBar
+	            android:id="@+id/progressConnect"
+	            style="?android:attr/progressBarStyleLarge"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:indeterminate="true" />
+	        <TextView
+		        android:id="@+id/textView1"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:text="正在连接..."
+		        android:textAppearance="?android:attr/textAppearanceMedium" />
+        </LinearLayout>
+    </FrameLayout>
+    
+ 
+     
+    <RelativeLayout android:id="@+id/mainview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical" >	    
+		    <RelativeLayout
+		        android:id="@+id/toolbar1"
+			    android:layout_width="match_parent"
+			    android:layout_height="wrap_content"
+			    android:orientation="horizontal" >
+		    	<ImageButton
+		    	    android:id="@+id/imageBtnUp"
+		    	    android:layout_width="wrap_content"
+		    	    android:layout_height="wrap_content"
+		    	    android:background="@layout/upselector"
+		    	    android:onClick="onClickUp" />
+		
+			    <TextView
+			        android:id="@+id/textPath"
+			        android:layout_width="wrap_content"
+			        android:layout_height="wrap_content"
+			        android:layout_margin="@dimen/activity_horizontal_margin"
+			        android:layout_toRightOf="@id/imageBtnUp"
+			        android:text="@string/sdcard"
+			        android:textAppearance="?android:attr/textAppearanceSmall" />
+		
+			    <TextView
+			        android:id="@+id/textChoiceAll"
+			        android:layout_width="wrap_content"
+			        android:layout_height="wrap_content"
+			        android:layout_alignBaseline="@+id/checkAll"
+			        android:layout_alignBottom="@+id/checkAll"
+			        android:layout_toLeftOf="@+id/checkAll"
+			        android:text="@string/checkall"
+			        android:textAppearance="?android:attr/textAppearanceMedium" />
+			    <CheckBox
+			        android:id="@+id/checkAll"
+			        android:layout_width="wrap_content"
+			        android:layout_height="wrap_content"
+			        android:layout_alignParentRight="true" />
+
+			    
+  
+		    </RelativeLayout> 
+		   
+		    <ListView
+		        android:id="@+id/fileListView"
+		        android:layout_width="match_parent"
+		        android:layout_height="match_parent"
+		        android:layout_below="@+id/toolbar1"
+		        android:layout_above="@+id/toolbar2"
+		         >
+	    	</ListView>	    		 
+      <LinearLayout
+        android:id="@+id/toolbar2"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+        android:background="#bcbcbc"
+        android:paddingTop="2dp" >        	
+	        <Button
+	            android:id="@+id/btnCopy"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"		        
+	            android:layout_weight="50"
+	            android:onClick="onClickLeftBtn"
+	            android:text="@string/copy" />
+	        
+	        <Button
+		        android:id="@+id/btnCancel"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_weight="50"
+		        android:text="@string/back"			   
+		        android:onClick="onClickRightBtn" />    
+            </LinearLayout>  
+	</RelativeLayout>
+	 	
+</FrameLayout>
+
+    

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Anytime文件共享</string>
+    <string name="action_settings">Settings</string>
+    
+    <string name="new_connect">新建连接</string>
+    <string name="remote">远端地址</string>
+    <string name="username">用户名</string>
+    <string name="pwd">密码</string>
+    <string name="domain">域</string>
+    <string name="remotepath">路径</string>
+    <string name="save">保存</string>
+    
+    <string name="sdcard">SD Card</string>
+    <string name="cancel">取 消</string>
+    <string name="copy">复制</string>
+    <string name="paste">粘贴</string>
+    <string name="copying">正在复制:</string>
+    <string name="delete">删除</string>
+    <string name="back">返回</string>
+    <string name="close">关闭</string>
+    <string name="checkall">全选</string>
+    <string name="ok">确定</string>
+    <string name="warn">警告</string>
+    <string name="new_task">新任务</string>
+    <string name="about">关于</string>
+    <string name="weibo">官方微博</string>
+    <string name="version">anytime文件共享 v1.0 beta</string>
+    <!--  <string name="url">网站：<a href="http://www.hqpc.ias3.com">http://www.hqpc.ias3.com</a></string> -->
+    <string name="weiboURL">微博：<a href="http://weibo.cn/xinanit">http://weibo.cn/xinanit</a></string>
+    <string name="email">Email:xinanit@163.com</string>
+    <string name="copyright">Copyright © 2013 恒庆网络工作室  版权所有</string>
+    
+    <string name="prompt_choicefile">请选择文件！</string>
+    <string name="prompt_copyFinish">复制完成！</string>
+    <string name="prompt_delete_success">删除成功！</string>
+    <string name="prompt_error_max_copynum">同时最多只能进行3个线程数复制，请稍后再试</string>
+    
+    <string name="warm_input_remote">请输入远端地址</string>
+    <string name="warm_input_username">请输入用户名</string>
+</resources>
