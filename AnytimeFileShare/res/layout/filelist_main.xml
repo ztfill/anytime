@@ -34,18 +34,37 @@
     <RelativeLayout android:id="@+id/mainview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical" >	    
+        android:orientation="vertical" >	
+        <!--  
+			<Spinner
+        	    android:id="@+id/topPathSpinner"
+        	    android:layout_width="wrap_content"
+        	    android:layout_height="wrap_content"
+        	    android:entries="@array/pathType"
+        	    /> 
+        	<Spinner
+        	    android:id="@+id/pathSpinner"
+        	    android:layout_width="match_parent"
+        	    android:layout_height="wrap_content"
+        	    android:layout_toRightOf="@+id/topPathSpinner"
+        	    /> 		
+        	   -->    
+        	   
+        	   
 		    <RelativeLayout
 		        android:id="@+id/toolbar1"
 			    android:layout_width="match_parent"
 			    android:layout_height="wrap_content"
+			    android:layout_below="@+id/incToolbar" 
 			    android:orientation="horizontal" >
+	        	
+		        
 		    	<ImageButton
 		    	    android:id="@+id/imageBtnUp"
 		    	    android:layout_width="wrap_content"
 		    	    android:layout_height="wrap_content"
 		    	    android:background="@layout/upselector"
-		    	    android:onClick="onClickUp" />
+		    	/>
 		
 			    <TextView
 			        android:id="@+id/textPath"
@@ -69,9 +88,7 @@
 			        android:id="@+id/checkAll"
 			        android:layout_width="wrap_content"
 			        android:layout_height="wrap_content"
-			        android:layout_alignParentRight="true" />
-
-			    
+			        android:layout_alignParentRight="true" />		    
   
 		    </RelativeLayout> 
 		   
@@ -95,15 +112,19 @@
 	            android:id="@+id/btnCopy"
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"		        
-	            android:layout_weight="50"
-	            android:onClick="onClickLeftBtn"
+	            android:layout_weight="33"
 	            android:text="@string/copy" />
-	        
+	        <Button
+	            android:id="@+id/btnPaste"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"		        
+	            android:layout_weight="33"
+	            android:text="@string/paste" />
 	        <Button
 		        android:id="@+id/btnCancel"
 		        android:layout_width="wrap_content"
 		        android:layout_height="wrap_content"
-		        android:layout_weight="50"
+		        android:layout_weight="33"
 		        android:text="@string/back"			   
 		        android:onClick="onClickRightBtn" />    
             </LinearLayout>  

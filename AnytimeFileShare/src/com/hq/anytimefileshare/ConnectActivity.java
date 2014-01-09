@@ -103,7 +103,7 @@ public class ConnectActivity extends UiBaseActivity {
 		} catch (Exception e) {
 			String s = "Save remote fail:" + e.getMessage();
 			Log.e("onClickConnect", s);
-			Common.showWarmMsg(ConnectActivity.this, s);
+			showWarmMsg(s);
 			return;
 		}
 	

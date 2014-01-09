@@ -4,6 +4,9 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 
 public class Common {
@@ -47,14 +50,6 @@ public class Common {
 		gotoNextActivity(context, cls);
 	}
 	
-	public static void showWarmMsg(Context context, String content) {
-		AlertDialog dlg = new AlertDialog.Builder(context)
-			.setTitle("¾¯¸æ").setMessage(content).setPositiveButton("È·¶¨", new DialogInterface
-					.OnClickListener() {						
-						@Override
-						public void onClick(DialogInterface dialog, int which) {
-						}
-					}).create();
-		dlg.show();
-	}
+	
+	
 }

@@ -73,6 +73,7 @@ public class UiBaseActivity extends Activity {
 	
 	
 	public void dealNextStep() {
+		finish();
 	}
 	
 	public void showWarmMsg(String content) {

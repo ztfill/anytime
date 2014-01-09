@@ -56,8 +56,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_toRightOf="@+id/btnSave"
-        android:text="@string/back"
-        android:onClick="onClickBack" />
+        android:text="@string/back" />
 
     <Button
         android:id="@+id/btnSave"
@@ -66,8 +65,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:layout_marginLeft="98dp"
-        android:text="@string/save"
-        android:onClick="onClickSave" />
+        android:text="@string/save" />
 
 	</RelativeLayout>
 </LinearLayout>

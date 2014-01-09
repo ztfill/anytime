@@ -14,15 +14,19 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.content.Intent;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.Spinner;
@@ -33,7 +37,7 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ListView;
 
 
-public class RemoteFileListActivity extends UiBaseActivity {
+public class RemoteFileListFragment extends Fragment {
 	static final int ITEM_COPY = 0;
 	
 	ChkListAdapter mAdapter = null;
@@ -45,31 +49,28 @@ public class RemoteFileListActivity extends UiBaseActivity {
 	Spinner mSpPath;
 	Intent mIntent;
 	Bundle mBundle;
+	View mView;
 	
-
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.filelist_main);
+	public static RemoteFileListFragment getNewInstance(String path) {
+		RemoteFileListFragment rflf = new RemoteFileListFragment();
+		Bundle b = new Bundle();		
+		b.putString(Global.REMOTE_KEY_URI, path);
+		rflf.setArguments(b);
 		
+		return rflf;
+	}
+	
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		if (container == null) {
+			return null;
+		}	
+	
+		mView = inflater.inflate(R.layout.filelist_main, container, false); 
 		h = new RemoteHandler();
-		findViewById(R.id.progressview).setVisibility(View.VISIBLE);
-		findViewById(R.id.mainview).setVisibility(View.GONE);
-		
-		//Spinner spinTopPath = (Spinner)findViewById(R.id.spinnerTopPath);
-		//ArrayAdapter adapter = ArrayAdapter.createFromResource(this, R.array.arrayTopPath, android.R.layout.simple_spinner_item); 
-		//adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		//spinTopPath.setAdapter(adapter);
-		
-		//((TextView)findViewById(R.id.textPath)).setText(mRemoteUri);
-		
-		//mSpPath = (Spinner)findViewById(R.id.pathSpinner);
-		String[] arr = {"fff", "ggg", "xxxggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg"};
-		mAdapterSp = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, arr);
-		mAdapterSp.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		mSpPath.setAdapter(mAdapterSp);
-		
-		mListView = (ListView)findViewById(R.id.fileListView);
+		mView.findViewById(R.id.progressview).setVisibility(View.VISIBLE);
+		mView.findViewById(R.id.mainview).setVisibility(View.GONE);
+		mListView = (ListView)mView.findViewById(R.id.fileListView);
 		registerForContextMenu(mListView);	
 		
 		mListView.setOnItemClickListener(new OnItemClickListener() {
@@ -80,17 +81,26 @@ public class RemoteFileListActivity extends UiBaseActivity {
 					return;
 				}
 				
-				gotoNextRemoteActivity(mRemoteFile.getPath() + fileInfo.getFileName() + Global.DIRECTORY_SPLITE_LABLE);
+				gotoNextRemoteFragment(mRemoteFile.getPath() + fileInfo.getFileName() + Global.DIRECTORY_SPLITE_LABLE);
 			}
-		});			
+		});	
+		
+		Button btnCopy = (Button)mView.findViewById(R.id.btnCopy);
+		btnCopy.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				onClickCopy();
+			}
+		});
+		
 		
 		RemoteThread cThread = new RemoteThread();
 		Thread t = new Thread(cThread);
 		t.start();
-			
+		
+		return mView;
 	}
 	
-
 	/* 创建长按menu */
 	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo mi) {
 		AdapterContextMenuInfo info = (AdapterContextMenuInfo)mi;
@@ -100,22 +110,14 @@ public class RemoteFileListActivity extends UiBaseActivity {
 		menu.setHeaderTitle(fileInfo.getFileName());
 		menu.add(0, ITEM_COPY, 1, R.string.copy);
 	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.main, menu);
-		return true;
-	}
-	
-	public void dealNextStep() {
-		finish();
-	}
 	
 	protected void InitRemoteFile() throws MalformedURLException {	
+		String localUri = null;
 		try {
-			mRemoteFile = new RemoteFile(Global.getRemoteUri());
+			if (getArguments() != null) {
+				localUri = getArguments().getString(Global.REMOTE_KEY_URI);
+			}
+			mRemoteFile = new RemoteFile(localUri);
 		} catch (MalformedURLException e) {
 			Log.e("RemoteFileListActivity", "Init remote file exception:" + e.getMessage());
 			throw e;
@@ -123,19 +125,23 @@ public class RemoteFileListActivity extends UiBaseActivity {
 	}
 	
 	void startNextActivity(Class<?> cls) {
-		mIntent = new Intent(RemoteFileListActivity.this, /*RemoteFileListActivity.class*/cls);
+		//mIntent = new Intent(RemoteFileListFragment.this, /*RemoteFileListActivity.class*/cls);
 		startActivity(mIntent);		
 	}
 	
-	void gotoNextActivity(ArrayList<String> fileNameList) {
+	void setClipboard(ArrayList<String> fileNameList) {
+		Global.setgClipboardPath(getArguments().getString(Global.REMOTE_KEY_URI));
 		Global.setFileNameList(fileNameList);
-		startNextActivity(LocalFileListActivity.class);
+		
+		Toast.makeText(this.getActivity(), R.string.prompt_setclipboard, Global.PROMPT_TIME).show();
 	}
 	
-	void gotoNextRemoteActivity(String remoteUri) {
-		Global.setRemoteUri(remoteUri);
-		startNextActivity(RemoteFileListActivity.class);
-		this.finish();
+	void gotoNextRemoteFragment(String remoteUri) {
+		//Global.setRemoteUri(remoteUri);
+		//startNextActivity(RemoteFileListFragment.class);
+		//this.finish();
+		RemoteFileListFragment rflf = getNewInstance(remoteUri);
+		MainActivity.changeFragment(rflf, true);
 	}
 	
 
@@ -151,17 +157,18 @@ public class RemoteFileListActivity extends UiBaseActivity {
 		ArrayList<String> fileNameList = new ArrayList<String>();		
 		fileNameList.add(fileName);		
 		
-		gotoNextActivity(fileNameList);
+		setClipboard(fileNameList);
 		
 		return false;
 	}
 	
-	protected void onClickCopy() {		
+	private void onClickCopy() {	
+		
 		ArrayList<String> fileNameList = new ArrayList<String>();
 		ArrayList<Integer> list = mAdapter.getCheckedListIndex();
 		
 		if (list.size() == 0) {
-			Toast.makeText(RemoteFileListActivity.this, R.string.prompt_choicefile, Global.PROMPT_TIME).show();
+			Toast.makeText(this.getActivity(), R.string.prompt_choicefile, Global.PROMPT_TIME).show();
 			return;
 		}
 		for (int i = 0; i < list.size(); i++) {
@@ -174,7 +181,9 @@ public class RemoteFileListActivity extends UiBaseActivity {
 			fileNameList.add(fileName);			
 		}
 		
-		gotoNextActivity(fileNameList);
+		setClipboard(fileNameList);
+		
+		
 	}	
 
 	
@@ -193,7 +202,7 @@ public class RemoteFileListActivity extends UiBaseActivity {
 		path = path.substring(0, path.lastIndexOf(arrayPath[arrayPath.length - 1]));
 		Log.i("path1", path);
 		
-		gotoNextRemoteActivity(path);
+		gotoNextRemoteFragment(path);
 	}
 	
 	public String getRemotePath() {
@@ -217,10 +226,12 @@ public class RemoteFileListActivity extends UiBaseActivity {
 			Bundle b = new Bundle();
 			
 			try {
-				InitRemoteFile();
-				((TextView)findViewById(R.id.textPath)).setText(getRemotePath());
+				if (mFileList == null) {
+					InitRemoteFile();
+					((TextView)mView.findViewById(R.id.textPath)).setText(getRemotePath());
 				
-				mFileList = mRemoteFile.getFileInfo();
+					mFileList = mRemoteFile.getFileInfo();
+				}
 				b.putInt(Global.HANDLER_RESULT, Global.ERRNO_SUCCESS);
 			} catch (Exception e) {
 				Log.e("RemoteFileListActivity", "Get file exception:" + e.getMessage());
@@ -245,14 +256,14 @@ public class RemoteFileListActivity extends UiBaseActivity {
 			int result = b.getInt(Global.HANDLER_RESULT);
 			switch (result) {
 			case Global.ERRNO_SUCCESS:	
-				mAdapter = new ChkListAdapter(RemoteFileListActivity.this,
+				mAdapter = new ChkListAdapter(mView.getContext(),
 						mFileList);
 				mListView.setAdapter(mAdapter); 				
 				
-				findViewById(R.id.progressview).setVisibility(View.GONE);
-				findViewById(R.id.mainview).setVisibility(View.VISIBLE);
+				mView.findViewById(R.id.progressview).setVisibility(View.GONE);
+				mView.findViewById(R.id.mainview).setVisibility(View.VISIBLE);
 				
-				CheckBox chkAll = (CheckBox)findViewById(R.id.checkAll);
+				CheckBox chkAll = (CheckBox)mView.findViewById(R.id.checkAll);
 				chkAll.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 					@Override
 					public void onCheckedChanged(CompoundButton buttonView,
@@ -264,7 +275,7 @@ public class RemoteFileListActivity extends UiBaseActivity {
 				
 				break;
 			case Global.ERRNO_FAIL:
-				showWarmMsg(b.getString(Global.HANDLER_MSG));
+				MainActivity.showWarmMsg(RemoteFileListFragment.this, b.getString(Global.HANDLER_MSG));
 				break;
 			default:
 				break;

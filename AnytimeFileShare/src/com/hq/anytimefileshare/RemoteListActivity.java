@@ -109,7 +109,7 @@ public class RemoteListActivity extends UiBaseActivity {
 			rm.delete(Integer.valueOf(map.get("ItemId")));
 		} catch (Exception e) {		
 			Log.e("RemoteListActivity", "Delte remote fail:" + e.getMessage());
-			Common.showWarmMsg(RemoteListActivity.this, e.getMessage());
+			showWarmMsg(e.getMessage());
 			return false;
 		} 
 		

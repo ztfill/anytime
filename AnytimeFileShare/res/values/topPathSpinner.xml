@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string-array name="arrayTopPath">  
-		<item>本地</item>  
-		<item>远端</item> 
-	</string-array>  
-</resources>
