@@ -37,6 +37,7 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.RemoteViews;
+import android.widget.Toast;
 
 
 
@@ -73,17 +74,14 @@ public class LocalFileListFragment extends Fragment {
     
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		if (container == null)
+		if (container == null) {
 			return null;
-		
-		
+		}		
 	
 		View v = inflater.inflate(R.layout.filelist_main, container, false); 
 		
 		v.findViewById(R.id.checkAll).setVisibility(View.INVISIBLE);
 		v.findViewById(R.id.textChoiceAll).setVisibility(View.INVISIBLE);
-		Button leftBtn = (Button)v.findViewById(R.id.btnCopy);
-		leftBtn.setText(R.string.paste);
 		/*
 		mIntent = v.getIntent();
 		mBundle = mIntent.getExtras();
@@ -102,9 +100,16 @@ public class LocalFileListFragment extends Fragment {
 			return null;
 		}
 		
-		((TextView)v.findViewById(R.id.textPath)).setText(mLocalFile.getPath());
+		((TextView)v.findViewById(R.id.textPath)).setText(/*mLocalFile.getPath()*/"geg");
 		if (mListView == null) {
-			mFileList = mLocalFile.getLocalFileInfo();		
+			try {
+				mFileList = mLocalFile.getFileInfo();
+			} catch (Exception e) {
+				e.printStackTrace();
+				Log.e("LocalFileListActivity", "Get local file info fail");
+				MainActivity.showWarmMsg(this, "Get local file info fail");
+				return null;
+			}		
 			if (mFileList == null) {
 				Log.e("LocalFileListActivity", "Get local file list fail");
 				MainActivity.showWarmMsg(this, "Get local file list fail");
@@ -114,7 +119,7 @@ public class LocalFileListFragment extends Fragment {
 		
 		mAdapter = new ChkListAdapter(v.getContext(),
 				mFileList);
-		mAdapter.setCheckedHide();
+		//mAdapter.setCheckedHide();
 		mListView = (ListView)v.findViewById(R.id.fileListView);	
 		mListView.setAdapter(mAdapter);
 	
@@ -122,10 +127,34 @@ public class LocalFileListFragment extends Fragment {
 		btnUp.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				onClickUp(v);
+				onClickUp();
 			}
 		});
 		
+		Button btnCopy = (Button)v.findViewById(R.id.btnCopy);
+		btnCopy.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				onClickCopy();
+			}
+		});
+		
+		
+		Button btnPaste = (Button)v.findViewById(R.id.btnPaste);
+		btnPaste.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				onClickPaste();
+			}
+		});
+		
+		Button btnCancel = (Button)v.findViewById(R.id.btnCancel);
+		btnCancel.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				getFragmentManager().popBackStack();
+			}
+		});
 		return v;
 	
 	}
@@ -151,19 +180,42 @@ public class LocalFileListFragment extends Fragment {
 		}
 	}
     
-    private void onClickUp(View view) {
-		String path = mLocalFile.getPath();
-		String[] arrayPath = path.split("/");
-		if (arrayPath.length <= 1) {
+    private void onClickUp() {
+    	getFragmentManager().popBackStack();
+	}
+    
+    private void onClickCopy() {			
+		ArrayList<Integer> list = mAdapter.getCheckedListIndex();
+		
+		if (list.size() == 0) {
+			Toast.makeText(this.getActivity(), R.string.prompt_choicefile, Global.PROMPT_TIME).show();
 			return;
 		}
 		
-		path = path.substring(0, path.lastIndexOf(arrayPath[arrayPath.length - 1]));
-		Log.i("path1", path);
+		Global.removeAllClipboardFile();
 		
-		//gotoNextLocalActivity(path);
-		LocalFileListFragment lff = getNewInstance(path);
-		MainActivity.changeFragment(lff, true);
-	}
+		try {
+			for (int i = 0; i < list.size(); i++) {
+				int index = list.get(i);
+				FileInfo f = mFileList.get(index);
+				String fileName = mLocalFile.getPath() + RemoteFile.FILE_DIRECTORY_SPLITE_LABLE + f.getFileName();
+				if (f.isDirectory()) {
+					fileName += RemoteFile.FILE_DIRECTORY_SPLITE_LABLE;
+				} 
 
+				LocalFile r = new LocalFile(fileName);
+				Global.addFileToClipboardFileList(r);											
+			}			
+		} catch (Exception e) {
+			Global.removeAllClipboardFile();
+			e.printStackTrace();
+			Log.e("LocalFileListFragment", "onClickCopy fail.");
+		}
+		
+		Common.setClipboard(this);	
+	}	
+
+    private void onClickPaste() {
+		new FileStream().copyFile(getActivity(), mLocalFile);
+	}
 }

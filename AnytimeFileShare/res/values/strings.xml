@@ -33,7 +33,7 @@
     <string name="copyright">Copyright © 2013 恒庆网络工作室  版权所有</string>
     
     <string name="prompt_choicefile">请选择文件！</string>
-    <string name="prompt_setclipboard">已设置到剪贴板</string>
+    <string name="prompt_setclipboard">已添加到剪贴板</string>
     <string name="prompt_copyFinish">复制完成！</string>
     <string name="prompt_delete_success">删除成功！</string>
     <string name="prompt_error_max_copynum">同时最多只能进行3个线程数复制，请稍后再试</string>

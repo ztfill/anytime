@@ -48,7 +48,7 @@ public class ConnectActivity extends UiBaseActivity {
 	}
 	
 	private void gotoRemoteListActivity() {
-		Common.gotoNextActivity(ConnectActivity.this, RemoteListActivity.class);
+		//Common.gotoNextActivity(ConnectActivity.this, RemoteListActivity.class);
 		finish();
 	}
 	

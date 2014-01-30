@@ -2,6 +2,8 @@ package com.hq.anytimefileshare;
 
 import java.util.ArrayList;
 
+import com.hq.anytimefileshare.model.FileBase;
+
 import android.support.v4.app.Fragment;
 
 
@@ -25,6 +27,8 @@ public final class Global {
 	
 	private static String gRemoteUri = null;
 	private static String gClipboardPath = null;
+	
+	private static ArrayList<FileBase> gClipboardFileList = new ArrayList<FileBase>();
 
 	private static ArrayList<String> gFileNameList = null;
 	
@@ -54,6 +58,18 @@ public final class Global {
 	public static void setgClipboardPath(String gClipboardPath) {
 		Global.gClipboardPath = gClipboardPath;
 	}
+	public static ArrayList<FileBase> getClipboardFileList() {
+		return gClipboardFileList;
+	}
+	public static void addFileToClipboardFileList(FileBase file) {
+		Global.gClipboardFileList.add(file);
+	}
 
-
+	public static void delFileFromClipboardFileList(FileBase file) {
+		Global.gClipboardFileList.remove(file);
+	}
+	
+	public static void removeAllClipboardFile() {
+		Global.gClipboardFileList.clear();
+	}
 }

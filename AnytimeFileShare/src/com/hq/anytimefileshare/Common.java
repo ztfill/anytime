@@ -1,5 +1,12 @@
 package com.hq.anytimefileshare;
 
+import java.util.ArrayList;
+
+import com.hq.anytimefileshare.model.FileBase;
+import com.hq.anytimefileshare.model.RemoteFile;
+import com.hq.anytimefileshare.model.dao.FileInfo;
+import com.hq.anytimefileshare.ui.ChkListAdapter;
+
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -8,6 +15,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
+import android.widget.Toast;
 
 public class Common {
 	static String getRemoteUri(String remoteAddr, String domain, String username, String pwd, String path) {
@@ -30,8 +38,7 @@ public class Common {
 			uri += path.trim() + Global.DIRECTORY_SPLITE_LABLE;
 		} else {
 			uri += Global.DIRECTORY_SPLITE_LABLE;
-		}
-		
+		}		
 		
 		return uri;
 	}
@@ -50,6 +57,11 @@ public class Common {
 		gotoNextActivity(context, cls);
 	}
 	
-	
-	
+	public static void setClipboard(Fragment f) {
+		//Global.setgClipboardPath(f.getArguments().getString(Global.REMOTE_KEY_URI));
+		//Global.setFileNameList(fileNameList);
+		
+		Toast.makeText(f.getActivity(), R.string.prompt_setclipboard, Global.PROMPT_TIME).show();
+	}
+		
 }

@@ -19,6 +19,4 @@ public class FileInfo {
 	public void setDirectory(boolean isDirectory) {
 		this.isDirectory = isDirectory;
 	}
-
-	
 }

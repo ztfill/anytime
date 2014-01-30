@@ -3,8 +3,10 @@ package com.hq.anytimefileshare;
 
 import java.net.MalformedURLException;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import com.hq.anytimefileshare.R;
+import com.hq.anytimefileshare.model.FileBase;
 import com.hq.anytimefileshare.model.RemoteFile;
 import com.hq.anytimefileshare.model.dao.FileInfo;
 import com.hq.anytimefileshare.ui.ChkListAdapter;
@@ -29,6 +31,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -81,7 +84,12 @@ public class RemoteFileListFragment extends Fragment {
 					return;
 				}
 				
-				gotoNextRemoteFragment(mRemoteFile.getPath() + fileInfo.getFileName() + Global.DIRECTORY_SPLITE_LABLE);
+				try {
+					gotoNextFragment(mRemoteFile.getPath() + fileInfo.getFileName() + RemoteFile.FILE_DIRECTORY_SPLITE_LABLE);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		});	
 		
@@ -90,6 +98,30 @@ public class RemoteFileListFragment extends Fragment {
 			@Override
 			public void onClick(View v) {
 				onClickCopy();
+			}
+		});
+		
+		Button btnPaste = (Button)mView.findViewById(R.id.btnPaste);
+		btnPaste.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				onClickPaste();
+			}
+		});
+		
+		Button btnCancel = (Button)mView.findViewById(R.id.btnCancel);
+		btnCancel.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				getFragmentManager().popBackStack();
+			}
+		});
+		
+		ImageButton btnUp = (ImageButton)mView.findViewById(R.id.imageBtnUp);
+		btnUp.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				onClickUp();
 			}
 		});
 		
@@ -111,14 +143,14 @@ public class RemoteFileListFragment extends Fragment {
 		menu.add(0, ITEM_COPY, 1, R.string.copy);
 	}
 	
-	protected void InitRemoteFile() throws MalformedURLException {	
+	protected void InitRemoteFile() throws Exception {	
 		String localUri = null;
 		try {
 			if (getArguments() != null) {
 				localUri = getArguments().getString(Global.REMOTE_KEY_URI);
 			}
 			mRemoteFile = new RemoteFile(localUri);
-		} catch (MalformedURLException e) {
+		} catch (Exception e) {
 			Log.e("RemoteFileListActivity", "Init remote file exception:" + e.getMessage());
 			throw e;
 		}
@@ -129,70 +161,78 @@ public class RemoteFileListFragment extends Fragment {
 		startActivity(mIntent);		
 	}
 	
-	void setClipboard(ArrayList<String> fileNameList) {
-		Global.setgClipboardPath(getArguments().getString(Global.REMOTE_KEY_URI));
-		Global.setFileNameList(fileNameList);
-		
-		Toast.makeText(this.getActivity(), R.string.prompt_setclipboard, Global.PROMPT_TIME).show();
-	}
 	
-	void gotoNextRemoteFragment(String remoteUri) {
-		//Global.setRemoteUri(remoteUri);
-		//startNextActivity(RemoteFileListFragment.class);
-		//this.finish();
-		RemoteFileListFragment rflf = getNewInstance(remoteUri);
-		MainActivity.changeFragment(rflf, true);
-	}
-	
-
 	/* 响应长按menu的点击事件 */
 	public boolean onContextItemSelected(MenuItem item) {
 		AdapterContextMenuInfo info = (AdapterContextMenuInfo)item.getMenuInfo(); 
 		
 		FileInfo f = (FileInfo)mAdapter.getItem(info.position);
-		String fileName = f.getFileName();
-		if (f.isDirectory()) {
-			fileName += Global.DIRECTORY_SPLITE_LABLE;
-		} 			
-		ArrayList<String> fileNameList = new ArrayList<String>();		
-		fileNameList.add(fileName);		
-		
-		setClipboard(fileNameList);
+		try {
+			String fileName = mRemoteFile.getPath() + RemoteFile.FILE_DIRECTORY_SPLITE_LABLE + f.getFileName();
+			if (f.isDirectory()) {
+				fileName += Global.DIRECTORY_SPLITE_LABLE;
+			} 				
+			
+			RemoteFile r = new RemoteFile(fileName);
+			Global.removeAllClipboardFile();
+			Global.addFileToClipboardFileList(r);
+			
+			Common.setClipboard(this);	
+		} catch (Exception e) {
+			e.printStackTrace();
+			Log.e("onContextItemSelected", "Long press copy fail:" + e.getMessage());
+		}
 		
 		return false;
 	}
 	
-	private void onClickCopy() {	
-		
-		ArrayList<String> fileNameList = new ArrayList<String>();
+	private void onClickCopy() {
 		ArrayList<Integer> list = mAdapter.getCheckedListIndex();
 		
 		if (list.size() == 0) {
 			Toast.makeText(this.getActivity(), R.string.prompt_choicefile, Global.PROMPT_TIME).show();
 			return;
 		}
-		for (int i = 0; i < list.size(); i++) {
-			int index = list.get(i);
-			FileInfo f = mFileList.get(index);
-			String fileName = f.getFileName();
-			if (f.isDirectory()) {
-				fileName += Global.DIRECTORY_SPLITE_LABLE;
-			} 
-			fileNameList.add(fileName);			
+		
+		Global.removeAllClipboardFile();
+		
+		try {
+			for (int i = 0; i < list.size(); i++) {
+				int index = list.get(i);
+				FileInfo f = mFileList.get(index);
+				String fileName = mRemoteFile.getPath() + RemoteFile.FILE_DIRECTORY_SPLITE_LABLE + f.getFileName();
+				if (f.isDirectory()) {
+					fileName += RemoteFile.FILE_DIRECTORY_SPLITE_LABLE;
+				} 
+
+				RemoteFile r = new RemoteFile(fileName);
+				Global.addFileToClipboardFileList(r);											
+			}			
+		} catch (Exception e) {
+			Global.removeAllClipboardFile();
+			e.printStackTrace();
+			Log.e("RemoteFileListFragment", "onClickCopy fail.");
 		}
 		
-		setClipboard(fileNameList);
-		
-		
+		Common.setClipboard(this);		
 	}	
-
 	
-	public void onClickLeftBtn(View view) {
-		onClickCopy();
+	private void onClickPaste() {
+		new FileStream().copyFile(getActivity(), mRemoteFile);
 	}
-	
-	public void onClickUp(View view) {
-		String path = mRemoteFile.getPath();
+
+		
+	private void onClickUp() {
+		getFragmentManager().popBackStack();
+		/*
+		String path;
+		try {
+			path = mRemoteFile.getPath();
+		} catch (Exception e) {
+			e.printStackTrace();
+			Log.e("onClickUp", "Get remote path fail:" + e.getMessage());
+			return;
+		}
 		String[] arrayPath = path.split(Global.DIRECTORY_SPLITE_LABLE);
 		
 		if (arrayPath.length <= 3) {
@@ -203,21 +243,28 @@ public class RemoteFileListFragment extends Fragment {
 		Log.i("path1", path);
 		
 		gotoNextRemoteFragment(path);
+		*/
 	}
 	
 	public String getRemotePath() {
 		String str = null;			
 		
-		str = mRemoteFile.getPath();		
-		String[] arrayStr = str.split("@");
-		if (arrayStr.length > 1) {
-			str = Global.DIRECTORY_SPLITE_LABLE + arrayStr[1];
-		} else {
-			str = str.substring(Global.REMOTE_URI_LABEL.length());
-			str = Global.DIRECTORY_SPLITE_LABLE + str;
-		}
+		try {
+			str = mRemoteFile.getPath();
+			String[] arrayStr = str.split("@");
+			if (arrayStr.length > 1) {
+				str = Global.DIRECTORY_SPLITE_LABLE + arrayStr[1];
+			} else {
+				str = str.substring(Global.REMOTE_URI_LABEL.length());
+				str = Global.DIRECTORY_SPLITE_LABLE + str;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			Log.e("getRemotePath", "Get remote path fail:" + e.getMessage());
+		}				
 		
 		return str;
+		
 	}
 	
 	class RemoteThread implements Runnable {

@@ -25,7 +25,7 @@ public class MainActivity extends FragmentActivity {
 		setContentView(R.layout.main);
 		
 		mFm = getSupportFragmentManager();
-		changeFragment(/*LocalFileListFragment.getNewInstance(null)*/new RemoteListFragment(), false);
+		changeFragment(LocalFileListFragment.getNewInstance(null)/* new RemoteListFragment()*/, false);
 		/*
 		RemoteListFragment newFragment = new RemoteListFragment();
 
