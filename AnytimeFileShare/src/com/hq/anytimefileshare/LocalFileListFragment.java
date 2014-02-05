@@ -4,15 +4,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.hq.anytimefileshare.R;
+import com.hq.anytimefileshare.model.FileBase;
 import com.hq.anytimefileshare.model.LocalFile;
-import com.hq.anytimefileshare.model.ModelProcess;
 import com.hq.anytimefileshare.model.RemoteFile;
 import com.hq.anytimefileshare.model.RemoteManger;
 import com.hq.anytimefileshare.model.dao.FileInfo;
 import com.hq.anytimefileshare.model.dao.RemoteInfo;
 import com.hq.anytimefileshare.ui.ActivityUI;
 import com.hq.anytimefileshare.ui.ChkListAdapter;
-import com.hq.anytimefileshare.ui.UiBaseActivity;
 
 import android.os.Bundle;
 import android.os.Environment;
@@ -31,7 +30,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
@@ -41,19 +43,9 @@ import android.widget.Toast;
 
 
 
-public class LocalFileListFragment extends Fragment {
-	ChkListAdapter mAdapter = null;
-	ArrayList<FileInfo> mFileList = null;
-	ProgressDialog mProDlg = null;
-	LocalFile mLocalFile = null;
+public class LocalFileListFragment extends FragmentBase {
 	String mLocalUri = null;
-	Intent mIntent = null;
-	Bundle mBundle = null;	
-	static final Handler mLocalHandler = new Handler();
-	NotificationManager manager;  
-    Notification notif;	
-    static int mIndex = 0;
-    ListView mListView = null;
+	static final Handler mLocalHandler = new Handler();	
     
     final Runnable mUpdateUI = new Runnable() {
     	public void run() {
@@ -62,100 +54,72 @@ public class LocalFileListFragment extends Fragment {
     	}
     };
     
-    public static LocalFileListFragment getNewInstance(String path) {
-    	LocalFileListFragment lff = new LocalFileListFragment();
+    public static FragmentBase getNewInstance(String path) {
+		return (new LocalFileListFragment()).getNewInstanceByPath(path);
+	}
+	
+	public FragmentBase getNewInstanceByPath(String path) {
+		FragmentBase lff = new LocalFileListFragment();
 		Bundle b = new Bundle();		
 		b.putString(Global.LOCAL_KEY_URI, path);
 		lff.setArguments(b);
 		
 		return lff;
-    }
-    
+	}
+	
+	FileBase getNewFileInstance(String path) throws Exception {
+		return new LocalFile(path);
+	}
     
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		if (container == null) {
 			return null;
 		}		
-	
-		View v = inflater.inflate(R.layout.filelist_main, container, false); 
 		
-		v.findViewById(R.id.checkAll).setVisibility(View.INVISIBLE);
-		v.findViewById(R.id.textChoiceAll).setVisibility(View.INVISIBLE);
-		/*
-		mIntent = v.getIntent();
-		mBundle = mIntent.getExtras();
-		if (mBundle != null) {
-			mLocalUri = mBundle.getString(Global.LOCAL_KEY_URI);	
-		}
-		*/
+		mView = super.onCreateView(inflater, container, savedInstanceState);
 		if (getArguments() != null) {
 			mLocalUri = getArguments().getString(Global.LOCAL_KEY_URI);
 		}
 		try {
 			InitLocalFile(mLocalUri);
+			((TextView)getActivity().findViewById(R.id.textPath)).setText(mFile.getShowPath());
 		} catch (Exception e) {
 			Log.e("LocalFileListActivity", "Get local file exception:" + e.getMessage());
 			MainActivity.showWarmMsg(this, e.getMessage());
 			return null;
 		}
 		
-		((TextView)v.findViewById(R.id.textPath)).setText(/*mLocalFile.getPath()*/"geg");
-		if (mListView == null) {
-			try {
-				mFileList = mLocalFile.getFileInfo();
-			} catch (Exception e) {
-				e.printStackTrace();
-				Log.e("LocalFileListActivity", "Get local file info fail");
-				MainActivity.showWarmMsg(this, "Get local file info fail");
-				return null;
-			}		
-			if (mFileList == null) {
-				Log.e("LocalFileListActivity", "Get local file list fail");
-				MainActivity.showWarmMsg(this, "Get local file list fail");
-				return null;
-			}
+		
+		try {
+			mFileList = mFile.getFileInfo();
+		} catch (Exception e) {
+			e.printStackTrace();
+			Log.e("LocalFileListActivity", "Get local file info fail");
+			MainActivity.showWarmMsg(this, "Get local file info fail");
+			return null;
+		}		
+		if (mFileList == null) {
+			Log.e("LocalFileListActivity", "Get local file list fail");
+			MainActivity.showWarmMsg(this, "Get local file list fail");
+			return null;
 		}
 		
-		mAdapter = new ChkListAdapter(v.getContext(),
-				mFileList);
-		//mAdapter.setCheckedHide();
-		mListView = (ListView)v.findViewById(R.id.fileListView);	
-		mListView.setAdapter(mAdapter);
-	
-		ImageButton btnUp = (ImageButton)v.findViewById(R.id.imageBtnUp);
-		btnUp.setOnClickListener(new View.OnClickListener() {
+		mAdapter = new ChkListAdapter(mView.getContext(),
+				mFileList);	
+		mListView.setAdapter(mAdapter);	
+		
+		CheckBox chkAll = (CheckBox)mView.findViewById(R.id.checkAll);
+		chkAll.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 			@Override
-			public void onClick(View v) {
-				onClickUp();
+			public void onCheckedChanged(CompoundButton buttonView,
+					boolean isChecked) {
+				mAdapter.setAllCheck(isChecked);
+				mAdapter.notifyDataSetChanged();
 			}
 		});
 		
-		Button btnCopy = (Button)v.findViewById(R.id.btnCopy);
-		btnCopy.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				onClickCopy();
-			}
-		});
-		
-		
-		Button btnPaste = (Button)v.findViewById(R.id.btnPaste);
-		btnPaste.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				onClickPaste();
-			}
-		});
-		
-		Button btnCancel = (Button)v.findViewById(R.id.btnCancel);
-		btnCancel.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				getFragmentManager().popBackStack();
-			}
-		});
-		return v;
+		return mView;
 	
 	}
 
@@ -172,7 +136,7 @@ public class LocalFileListFragment extends Fragment {
 		}
 		
 		try {
-			mLocalFile = new LocalFile(mLocalUri);
+			mFile = new LocalFile(mLocalUri);
 		} catch (Exception e) {
 			//e.printStackTrace();
 			Log.e("LocalFileListActivity", "Init local file exception:" + e.getMessage());
@@ -180,42 +144,23 @@ public class LocalFileListFragment extends Fragment {
 		}
 	}
     
-    private void onClickUp() {
-    	getFragmentManager().popBackStack();
-	}
-    
-    private void onClickCopy() {			
-		ArrayList<Integer> list = mAdapter.getCheckedListIndex();
-		
-		if (list.size() == 0) {
-			Toast.makeText(this.getActivity(), R.string.prompt_choicefile, Global.PROMPT_TIME).show();
-			return;
-		}
-		
-		Global.removeAllClipboardFile();
-		
+    String getUpPath() {
+    	String path;
 		try {
-			for (int i = 0; i < list.size(); i++) {
-				int index = list.get(i);
-				FileInfo f = mFileList.get(index);
-				String fileName = mLocalFile.getPath() + RemoteFile.FILE_DIRECTORY_SPLITE_LABLE + f.getFileName();
-				if (f.isDirectory()) {
-					fileName += RemoteFile.FILE_DIRECTORY_SPLITE_LABLE;
-				} 
-
-				LocalFile r = new LocalFile(fileName);
-				Global.addFileToClipboardFileList(r);											
-			}			
+			path = mFile.getPath();
 		} catch (Exception e) {
-			Global.removeAllClipboardFile();
+			// TODO Auto-generated catch block
 			e.printStackTrace();
-			Log.e("LocalFileListFragment", "onClickCopy fail.");
+			return null;
+		}
+		String[] arrayPath = path.split("/");
+		if (arrayPath.length <= 1) {
+			return null;
 		}
 		
-		Common.setClipboard(this);	
-	}	
-
-    private void onClickPaste() {
-		new FileStream().copyFile(getActivity(), mLocalFile);
-	}
+		path = path.substring(0, path.lastIndexOf(arrayPath[arrayPath.length - 1]));
+		Log.i("path1", path);
+		
+		return path;
+    }
 }

@@ -13,11 +13,13 @@
    	    	android:layout_height="wrap_content"
    	    	android:entries="@array/pathType"
    	    /> 
-   		<Spinner
-   	    	android:id="@+id/pathSpinner"
-   	    	android:layout_width="match_parent"
-   	    	android:layout_height="wrap_content"
-   	    /> 	
+   		<TextView
+	        android:id="@+id/textPath"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_margin="@dimen/activity_horizontal_margin"
+	        android:text="@string/sdcard"
+	        android:textAppearance="?android:attr/textAppearanceSmall" />
    	</LinearLayout>
 	<FrameLayout 
 	    android:id="@+id/mainContent"

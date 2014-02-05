@@ -15,7 +15,7 @@ import android.util.Log;
 import android.widget.RemoteViews;
 
 import com.hq.anytimefileshare.model.FileBase;
-import com.hq.anytimefileshare.model.ModelProcess;
+import com.hq.anytimefileshare.model.FileProgress;
 import com.hq.anytimefileshare.model.RemoteFile;
 import com.hq.anytimefileshare.ui.ActivityUI;
 
@@ -30,6 +30,9 @@ public class FileStream {
 		mActivity = activity;
 		Intent intent = new Intent(mActivity, activity.getClass());  
         
+		intent.setAction(Intent.ACTION_MAIN);
+		intent.addCategory(Intent.CATEGORY_LAUNCHER);
+		
 		Bundle b = new Bundle();
 		//todo b.putString(Global.LOCAL_KEY_URI, mLocalFile.getPath());
 		intent.putExtras(b);
@@ -107,15 +110,18 @@ public class FileStream {
 	    }
 		
 		void copyFile() {
-			String tip1 = "¸´ÖÆÊ§°Ü", tip2 = "xx";
+			String tip1 = "¸´ÖÆÊ§°Ü", tip2 = "";
 			Log.i("FileListActivity", "Copy remote files to local path:" + mLocalUriThread);	
 			ArrayList<FileBase> list =  Global.getClipboardFileList();
 			Iterator<FileBase> it = list.iterator();
+			FileProgress fp = new CopyProcess();
+			int step = Global.PROGRESS_MAX / list.size();
 			try {
 				while (it.hasNext()) {
 					FileBase from = it.next();
-					RemoteFile rf = new RemoteFile(mTo.getPath() + from.getFileName());
-					rf.write(from);
+					tip2 += from.getFileName() + " ";
+					FileBase rf = mTo.getNewFileInstance(mTo.getPath() + from.getFileName());
+					rf.write(from, fp, step);
 				}
 				
 				mNotif.contentView.setProgressBar(R.id.content_view_progress, Global.PROGRESS_MAX, Global.PROGRESS_MAX, false);  
@@ -192,14 +198,17 @@ public class FileStream {
 			copyFile();
 		}
 		
-		class CopyProcess implements ModelProcess {
-			long mCurrentTime = System.currentTimeMillis();
-			int mStep = 0;
-			int mLimitStep = 0;
+		class CopyProcess implements FileProgress {
+			private final static int KILO = 1024;
+			private long mCurrentTime = System.currentTimeMillis();
+			private int mStep = 0;
+			private long lastBytes = 0, curBytes = 0;
 			
-
+			CopyProcess() {	
+				mNotif.contentView.setTextViewText(R.id.textSpeed, "0");
+			}
 			
-			public void copyToLocalIncProcess(int step) {
+			public void writeProgress(int step, long incBytes) {
 				if (mStep > Global.PROGRESS_MAX) {
 					return;
 				} 
@@ -208,13 +217,20 @@ public class FileStream {
 					mStep = Global.PROGRESS_MAX;
 				} 
 				
+				curBytes += incBytes;
+				
 				if ((mCurrentTime + 1000) > System.currentTimeMillis()) {
 					return;
 				}
 				
 				mCurrentTime = System.currentTimeMillis();
+				
+				long speed = (curBytes - lastBytes) / KILO;
+				lastBytes = curBytes;
+				mNotif.contentView.setTextViewText(R.id.textProgress, String.valueOf(mStep));
+				mNotif.contentView.setTextViewText(R.id.textSpeed, String.valueOf(speed));
 				mNotif.contentView.setProgressBar(R.id.content_view_progress, Global.PROGRESS_MAX, mStep, false);  
-	            mManager.notify(mNotifyIndex, mNotif); 
+				mManager.notify(mNotifyIndex, mNotif); 
 	            
 			}
 		}

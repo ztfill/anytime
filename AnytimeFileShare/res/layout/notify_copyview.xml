@@ -7,8 +7,7 @@
     
     <LinearLayout
 	    android:layout_width="match_parent"
-	    android:layout_height="wrap_content" >
-	    
+	    android:layout_height="wrap_content" >	    
         <TextView
             android:id="@+id/textCopyTip"
             android:layout_width="wrap_content"
@@ -24,6 +23,41 @@
 	    android:textAppearance="?android:attr/textAppearanceSmall"
 	    android:textColor="#000000" />
 	</LinearLayout>
+	
+    <RelativeLayout android:id="@+id/progressview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/textProgress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="#000000" />
+        <TextView
+            android:id="@+id/textProgressUnit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/ProgressUnit"
+            android:layout_toRightOf="@+id/textProgress"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="#000000" />
+        <TextView
+            android:id="@+id/textSpeed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@+id/textSpeedUnit"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="#000000" />
+        <TextView
+            android:id="@+id/textSpeedUnit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/speedUnit"
+            android:layout_alignParentRight="true"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="#000000" />
+	</RelativeLayout>
     
     
 	<ProgressBar   

@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    android:padding="10dp" >
+    android:padding="5dp" >
 
     <ImageView
         android:id="@+id/imageLogo"
@@ -20,27 +20,7 @@
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textColor="#ffffff" />
     
-    <!--  
-    <TextView
-        android:id="@+id/textURL"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingTop="5dp"
-        android:text="@string/url"
-        android:autoLink="all"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textColor="#ffffff" />
-    -->
-      <!--  
-    <TextView
-        android:id="@+id/textWeibo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingTop="5dp"
-        android:text="@string/weibo"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textColor="#ffffff" />
-       -->
+   
     <TextView
         android:id="@+id/textWeiboURL"
         android:layout_width="wrap_content"

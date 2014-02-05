@@ -5,7 +5,6 @@ import java.util.HashMap;
 
 import com.hq.anytimefileshare.model.RemoteManger;
 import com.hq.anytimefileshare.model.dao.RemoteInfo;
-import com.hq.anytimefileshare.ui.UiBaseActivity;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -19,6 +18,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 
 public class ConnectFragment extends Fragment {
@@ -28,12 +28,13 @@ public class ConnectFragment extends Fragment {
 			return null;
 		}	
 	
-		View v = inflater.inflate(R.layout.connect, container, false); 		
+		View v = inflater.inflate(R.layout.connect, container, false); 	
+		((TextView)getActivity().findViewById(R.id.textPath)).setText(getResources().getString(R.string.new_connect));
 		Button btnSave = (Button)v.findViewById(R.id.btnSave);
 		btnSave.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				onClickSave(v);
+				onClickSave();
 			}
 		});
 		
@@ -41,7 +42,7 @@ public class ConnectFragment extends Fragment {
 		btnBack.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				//todo
+				gotoRemoteListFragment();
 			}
 		});
 		
@@ -77,10 +78,10 @@ public class ConnectFragment extends Fragment {
 	private void gotoRemoteListFragment() {
 		//Common.gotoNextActivity(ConnectFragment.this, RemoteListActivity.class);
 		//finish();
-		MainActivity.changeFragment(new RemoteListFragment(), true);
+		MainActivity.changeFragment(new RemoteListFragment(), false);
 	}
 	
-	public void onClickSave(View view) {
+	public void onClickSave() {
 		EditText edit = (EditText)getView().findViewById(R.id.editRemote);	
 		if (edit.length() <= 0) {
 			edit.requestFocus();

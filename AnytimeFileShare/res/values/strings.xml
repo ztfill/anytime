@@ -11,6 +11,11 @@
     <string name="domain">域</string>
     <string name="remotepath">路径</string>
     <string name="save">保存</string>
+    <string name="lan">网上邻居</string>
+    
+    
+    <string name="ProgressUnit">%</string>
+    <string name="speedUnit">KB/s</string>
     
     <string name="sdcard">SD Card</string>
     <string name="cancel">取 消</string>
@@ -25,14 +30,16 @@
     <string name="warn">警告</string>
     <string name="new_task">新任务</string>
     <string name="about">关于</string>
+    <string name="exit">退出</string>
     <string name="weibo">官方微博</string>
-    <string name="version">anytime文件共享 v1.0 beta</string>
+    <string name="version">anytime文件共享 v1.0</string>
     <!--  <string name="url">网站：<a href="http://www.hqpc.ias3.com">http://www.hqpc.ias3.com</a></string> -->
     <string name="weiboURL">微博：<a href="http://weibo.cn/xinanit">http://weibo.cn/xinanit</a></string>
     <string name="email">Email:xinanit@163.com</string>
-    <string name="copyright">Copyright © 2013 恒庆网络工作室  版权所有</string>
+    <string name="copyright">Copyright © 2013-2014 恒庆网络工作室  版权所有</string>
     
     <string name="prompt_choicefile">请选择文件！</string>
+    <string name="prompt_choicecopy">请先选择要复制的文件！</string>
     <string name="prompt_setclipboard">已添加到剪贴板</string>
     <string name="prompt_copyFinish">复制完成！</string>
     <string name="prompt_delete_success">删除成功！</string>

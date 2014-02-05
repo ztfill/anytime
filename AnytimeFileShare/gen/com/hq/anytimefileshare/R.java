@@ -9,7 +9,6 @@ package com.hq.anytimefileshare;
 
 public final class R {
     public static final class array {
-        public static final int path=0x7f040001;
         public static final int pathType=0x7f040000;
     }
     public static final class attr {
@@ -33,49 +32,51 @@ public final class R {
         public static final int uppressed=0x7f020005;
     }
     public static final class id {
-        public static final int ItemText=0x7f090028;
-        public static final int ItemTitle=0x7f090027;
+        public static final int ItemText=0x7f09002a;
+        public static final int ItemTitle=0x7f090029;
         public static final int btnAboutOK=0x7f090005;
         public static final int btnBack=0x7f09000b;
-        public static final int btnCancel=0x7f09001b;
-        public static final int btnCopy=0x7f090019;
-        public static final int btnNewConnect=0x7f090025;
-        public static final int btnPaste=0x7f09001a;
+        public static final int btnCancel=0x7f090019;
+        public static final int btnCopy=0x7f090017;
+        public static final int btnNewConnect=0x7f090027;
+        public static final int btnPaste=0x7f090018;
         public static final int btnSave=0x7f09000c;
-        public static final int checkAll=0x7f090016;
-        public static final int checkFile=0x7f09001e;
-        public static final int content_view_progress=0x7f090024;
+        public static final int checkAll=0x7f090014;
+        public static final int checkFile=0x7f09001c;
+        public static final int content_view_progress=0x7f090026;
         public static final int editDomain=0x7f090009;
         public static final int editPwd=0x7f090008;
         public static final int editRemote=0x7f090006;
         public static final int editRemotePath=0x7f09000a;
         public static final int editUsername=0x7f090007;
-        public static final int fileListView=0x7f090017;
-        public static final int fileName=0x7f09001d;
-        public static final int imageBtnUp=0x7f090013;
-        public static final int imageFile=0x7f09001c;
+        public static final int fileListView=0x7f090015;
+        public static final int fileName=0x7f09001b;
+        public static final int imageBtnUp=0x7f090012;
+        public static final int imageFile=0x7f09001a;
         public static final int imageLogo=0x7f090000;
-        public static final int incToolbar=0x7f090012;
-        public static final int listRemote=0x7f090026;
-        public static final int mainContent=0x7f090021;
+        public static final int listRemote=0x7f090028;
+        public static final int mainContent=0x7f09001f;
         public static final int mainview=0x7f090010;
-        public static final int menu_about=0x7f09002a;
-        public static final int menu_back=0x7f090029;
-        public static final int pathSpinner=0x7f090020;
+        public static final int menu_about=0x7f09002c;
+        public static final int menu_exit=0x7f09002b;
         public static final int progressConnect=0x7f09000e;
         public static final int progressview=0x7f09000d;
-        public static final int textChoiceAll=0x7f090015;
-        public static final int textCopyFile=0x7f090023;
-        public static final int textCopyTip=0x7f090022;
+        public static final int textChoiceAll=0x7f090013;
+        public static final int textCopyFile=0x7f090021;
+        public static final int textCopyTip=0x7f090020;
         public static final int textCopyright=0x7f090004;
         public static final int textEmail=0x7f090003;
-        public static final int textPath=0x7f090014;
+        public static final int textPath=0x7f09001e;
+        public static final int textProgress=0x7f090022;
+        public static final int textProgressUnit=0x7f090023;
+        public static final int textSpeed=0x7f090024;
+        public static final int textSpeedUnit=0x7f090025;
         public static final int textURL=0x7f090001;
         public static final int textView1=0x7f09000f;
         public static final int textWeiboURL=0x7f090002;
         public static final int toolbar1=0x7f090011;
-        public static final int toolbar2=0x7f090018;
-        public static final int topPathSpinner=0x7f09001f;
+        public static final int toolbar2=0x7f090016;
+        public static final int topPathSpinner=0x7f09001d;
     }
     public static final class layout {
         public static final int about=0x7f030000;
@@ -92,42 +93,47 @@ public final class R {
         public static final int main=0x7f080000;
     }
     public static final class string {
-        public static final int about=0x7f060015;
+        public static final int ProgressUnit=0x7f06000a;
+        public static final int about=0x7f060018;
         public static final int action_settings=0x7f060001;
         public static final int app_name=0x7f060000;
-        public static final int back=0x7f06000f;
-        public static final int cancel=0x7f06000a;
-        public static final int checkall=0x7f060011;
-        public static final int close=0x7f060010;
-        public static final int copy=0x7f06000b;
-        public static final int copying=0x7f06000d;
-        public static final int copyright=0x7f06001a;
-        public static final int delete=0x7f06000e;
+        public static final int back=0x7f060012;
+        public static final int cancel=0x7f06000d;
+        public static final int checkall=0x7f060014;
+        public static final int close=0x7f060013;
+        public static final int copy=0x7f06000e;
+        public static final int copying=0x7f060010;
+        public static final int copyright=0x7f06001e;
+        public static final int delete=0x7f060011;
         public static final int domain=0x7f060006;
-        public static final int email=0x7f060019;
+        public static final int email=0x7f06001d;
+        public static final int exit=0x7f060019;
+        public static final int lan=0x7f060009;
         public static final int new_connect=0x7f060002;
-        public static final int new_task=0x7f060014;
-        public static final int ok=0x7f060012;
-        public static final int paste=0x7f06000c;
-        public static final int prompt_choicefile=0x7f06001b;
-        public static final int prompt_copyFinish=0x7f06001d;
-        public static final int prompt_delete_success=0x7f06001e;
-        public static final int prompt_error_max_copynum=0x7f06001f;
-        public static final int prompt_setclipboard=0x7f06001c;
+        public static final int new_task=0x7f060017;
+        public static final int ok=0x7f060015;
+        public static final int paste=0x7f06000f;
+        public static final int prompt_choicecopy=0x7f060020;
+        public static final int prompt_choicefile=0x7f06001f;
+        public static final int prompt_copyFinish=0x7f060022;
+        public static final int prompt_delete_success=0x7f060023;
+        public static final int prompt_error_max_copynum=0x7f060024;
+        public static final int prompt_setclipboard=0x7f060021;
         public static final int pwd=0x7f060005;
         public static final int remote=0x7f060003;
         public static final int remotepath=0x7f060007;
         public static final int save=0x7f060008;
-        public static final int sdcard=0x7f060009;
+        public static final int sdcard=0x7f06000c;
+        public static final int speedUnit=0x7f06000b;
         public static final int username=0x7f060004;
-        public static final int version=0x7f060017;
-        public static final int warm_input_remote=0x7f060020;
-        public static final int warm_input_username=0x7f060021;
-        public static final int warn=0x7f060013;
-        public static final int weibo=0x7f060016;
+        public static final int version=0x7f06001b;
+        public static final int warm_input_remote=0x7f060025;
+        public static final int warm_input_username=0x7f060026;
+        public static final int warn=0x7f060016;
+        public static final int weibo=0x7f06001a;
         /**   <string name="url">网站：<a href="http://www.hqpc.ias3.com">http://www.hqpc.ias3.com</a></string> 
          */
-        public static final int weiboURL=0x7f060018;
+        public static final int weiboURL=0x7f06001c;
     }
     public static final class style {
         /** 

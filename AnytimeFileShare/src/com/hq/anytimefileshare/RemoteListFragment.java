@@ -10,14 +10,20 @@ import com.hq.anytimefileshare.model.dao.RemoteInfo;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.Toast;
 
 
 public class  RemoteListFragment extends Fragment {
@@ -31,10 +37,8 @@ public class  RemoteListFragment extends Fragment {
 		if (container == null) {
 			return null;
 		}		
-		
-		
 	
-			View v = inflater.inflate(R.layout.remotelist_main, container, false); 
+		View v = inflater.inflate(R.layout.remotelist_main, container, false); 
 		if (mListView == null) {	// 用于判断返回键按钮，如果是返回键，不进入下面的语句 
 			RemoteManger rm = new RemoteManger(v.getContext());
 			ArrayList<RemoteInfo> dataList = null;
@@ -60,6 +64,8 @@ public class  RemoteListFragment extends Fragment {
 			}						
 		} 
 		
+		((TextView)getActivity().findViewById(R.id.textPath)).setText(getResources().getString(R.string.lan));
+		
 		mListView = (ListView)v.findViewById(R.id.listRemote);
 		registerForContextMenu(mListView);
 		mAdapter = new SimpleAdapter(v.getContext(), mList,
@@ -75,7 +81,7 @@ public class  RemoteListFragment extends Fragment {
 				String connectUri = getRemoteUri(map.get("ItemTitle"), map.get("ItemDomain"),
 								map.get("ItemUserName"), map.get("ItemUserPwd"), map.get("ItemText"));
 				Log.i("RemoteListFragment", "Connect uri is:" + connectUri);
-				RemoteFileListFragment rflf = RemoteFileListFragment.getNewInstance(connectUri);
+				FragmentBase rflf = RemoteFileListFragment.getNewInstance(connectUri);
 				
 				MainActivity.changeFragment(rflf, true);
 			}
@@ -94,10 +100,6 @@ public class  RemoteListFragment extends Fragment {
 	}
 	
 	private void onClickNewConnect(View view) {
-		//Intent intent = new Intent(RemoteListActivity.this, ConnectActivity.class);
-		//startActivity(intent);
-		//finish();
-		
 		MainActivity.changeFragment(new ConnectFragment(), true);
 	}
 	
@@ -125,6 +127,35 @@ public class  RemoteListFragment extends Fragment {
 		
 		
 		return uri;
+	}
+	
+	/* 创建长按menu */
+	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo mi) {
+		AdapterContextMenuInfo info = (AdapterContextMenuInfo)mi;
+		HashMap<String, String> map = mList.get(info.position);
+
+		Log.i("RemoteFileListActivity", "Long time click remote is:" + map.get("ItemTitle"));
+		menu.setHeaderTitle(map.get("ItemTitle"));
+		menu.add(0, ITEM_DELETE, 1, R.string.delete);
+	}
+	
+	/* 响应长按menu的点击事件 */
+	public boolean onContextItemSelected(MenuItem item) {
+		AdapterContextMenuInfo info = (AdapterContextMenuInfo)item.getMenuInfo(); 
+		HashMap<String, String> map = mList.get(info.position);
+		RemoteManger rm = new RemoteManger(getActivity());
+		try {
+			rm.delete(Integer.valueOf(map.get("ItemId")));
+		} catch (Exception e) {		
+			Log.e("RemoteListActivity", "Delte remote fail:" + e.getMessage());
+			MainActivity.showWarmMsg(this, e.getMessage());
+			return false;
+		} 
+		
+		mList.remove(info.position);
+		mAdapter.notifyDataSetChanged();
+		Toast.makeText(getActivity(), R.string.prompt_delete_success, Global.PROMPT_TIME).show();
+		return false;
 	}
 	
 }
