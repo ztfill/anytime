@@ -113,6 +113,10 @@ public class MainActivity extends FragmentActivity {
 		transaction.commit();
 	}
 	
+	static 	Fragment getCurrentFragment() {		
+		return mFm.findFragmentById(R.id.mainContent);
+	}
+	
 	public static void showWarmMsg(final Fragment context, String content) {
 		Context c = context.getActivity();
 		if (c == null) {

@@ -32,7 +32,8 @@ public final class Global {
 
 	private static ArrayList<String> gFileNameList = null;
 	
-	private static Fragment gPrevFrag = null;
+	private static FragmentBase gCurrentFrag = null;
+	
 	
 	public static String getRemoteUri() {
 		return gRemoteUri;
@@ -46,12 +47,7 @@ public final class Global {
 	public static void setFileNameList(ArrayList<String> gFileNameList) {
 		Global.gFileNameList = gFileNameList;
 	}
-	public static Fragment getgPrevFrag() {
-		return gPrevFrag;
-	}
-	public static void setgPrevFrag(Fragment gPrevFrag) {
-		Global.gPrevFrag = gPrevFrag;
-	}
+	
 	public static String getgClipboardPath() {
 		return gClipboardPath;
 	}
@@ -71,5 +67,11 @@ public final class Global {
 	
 	public static void removeAllClipboardFile() {
 		Global.gClipboardFileList.clear();
+	}
+	public static FragmentBase getgCurrentFrag() {
+		return gCurrentFrag;
+	}
+	public static void setgCurrentFrag(FragmentBase gCurrentFrag) {
+		Global.gCurrentFrag = gCurrentFrag;
 	}
 }

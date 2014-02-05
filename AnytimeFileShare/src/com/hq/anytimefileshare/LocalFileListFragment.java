@@ -47,13 +47,6 @@ public class LocalFileListFragment extends FragmentBase {
 	String mLocalUri = null;
 	static final Handler mLocalHandler = new Handler();	
     
-    final Runnable mUpdateUI = new Runnable() {
-    	public void run() {
-    		//updateListView(mFileNameList.get(i));
-    		mAdapter.notifyDataSetChanged();
-    	}
-    };
-    
     public static FragmentBase getNewInstance(String path) {
 		return (new LocalFileListFragment()).getNewInstanceByPath(path);
 	}
@@ -82,7 +75,7 @@ public class LocalFileListFragment extends FragmentBase {
 			mLocalUri = getArguments().getString(Global.LOCAL_KEY_URI);
 		}
 		try {
-			InitLocalFile(mLocalUri);
+			InitFileByPath(mLocalUri);
 			((TextView)getActivity().findViewById(R.id.textPath)).setText(mFile.getShowPath());
 		} catch (Exception e) {
 			Log.e("LocalFileListActivity", "Get local file exception:" + e.getMessage());
@@ -162,5 +155,15 @@ public class LocalFileListFragment extends FragmentBase {
 		Log.i("path1", path);
 		
 		return path;
+    }
+    
+    void InitFileByPath(String path) throws Exception {
+    	try {
+    		InitLocalFile(path);
+    	} catch (Exception e) {
+    		e.printStackTrace();
+    		Log.e("LocalFileListFragment.InitFileByPath", "Init file fail:" + e.getMessage());
+    		throw e;
+    	}
     }
 }

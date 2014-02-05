@@ -123,6 +123,16 @@ public class RemoteFileListFragment extends FragmentBase {
 		
 		return path;
 	}
+	
+	void InitFileByPath(String path) throws Exception {
+    	try {
+    		mFile = new RemoteFile(path);
+    	} catch (Exception e) {
+    		e.printStackTrace();
+    		Log.e("RemoteFileListFragment.InitFileByPath", "Init file fail:" + e.getMessage());
+    		throw e;
+    	}
+    }
 		
 	class RemoteThread implements Runnable {
 		void getRemoteFile() {

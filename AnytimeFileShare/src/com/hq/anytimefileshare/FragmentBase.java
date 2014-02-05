@@ -47,10 +47,18 @@ public abstract class FragmentBase extends Fragment {
 	ArrayList<FileInfo> mFileList = null;
 	FileBase mFile = null;
 	View mView;
+	final Handler mFragHandler = new Handler();
+	
+	final Runnable mUpdateUI = new Runnable() {
+    	public void run() {
+    		mAdapter.notifyDataSetChanged();
+    	}
+    };
 	
 	public abstract FragmentBase getNewInstanceByPath(String path);
 	abstract FileBase getNewFileInstance(String path) throws Exception;
 	abstract String getUpPath();
+	abstract void InitFileByPath(String path) throws Exception;
 	
 	void gotoNextFragment(String remoteUri) {
 		if (remoteUri == null) {
@@ -119,7 +127,6 @@ public abstract class FragmentBase extends Fragment {
 				onClickUp();
 			}
 		});
-		
 		
 		return mView;
 	}
@@ -208,5 +215,35 @@ public abstract class FragmentBase extends Fragment {
 		gotoNextFragment(mFile.getParent());
 	}		
 	
+	String getPath() {
+		String ret = null;
+		if (mFile == null) {
+			return null;
+		}
+		
+		try {
+			ret = mFile.getPath();
+		} catch (Exception e) {
+			e.printStackTrace();
+			Log.e("FragmentBase.getPath", "get path fail:" + e.getMessage());
+		}
+		
+		return ret;
+	}
 	
+	void updateListView() throws Exception {
+		mFileList.clear();
+		try {
+			InitFileByPath(mFile.getPath());
+			ArrayList<FileInfo> list = mFile.getFileInfo();	
+			Iterator<FileInfo> it = list.iterator();
+			while (it.hasNext()) {
+				mFileList.add(it.next());
+			}
+			mFragHandler.post(mUpdateUI);
+		} catch (Exception e) {
+			Log.e("updateListView", "Update list view is fail.");
+			throw e;
+		}
+	}
 }

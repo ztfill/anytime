@@ -110,7 +110,7 @@ public class FileStream {
 	    }
 		
 		void copyFile() {
-			String tip1 = "复制失败", tip2 = "";
+			String tip1 = "复制失败", tip2 = "";			
 			Log.i("FileListActivity", "Copy remote files to local path:" + mLocalUriThread);	
 			ArrayList<FileBase> list =  Global.getClipboardFileList();
 			Iterator<FileBase> it = list.iterator();
@@ -142,6 +142,20 @@ public class FileStream {
 				mManager.notify(mNotifyIndex, mNotif); 
 				
 				resumeNotifyIndex(mNotifyIndex);	
+				
+				/* 更新文件列表 */
+				Fragment uiFrag = MainActivity.getCurrentFragment();
+				if (uiFrag != null) {
+					if (uiFrag instanceof FragmentBase) {
+						try {
+							((FragmentBase) uiFrag).updateListView();
+						} catch (Exception e) {
+							e.printStackTrace();
+							Log.e("copyFile", "update list view fail:" + e.getMessage());
+						}
+						
+					}
+				} 
 			}
 			
 /*			
