@@ -4,8 +4,6 @@ import java.util.ArrayList;
 
 import com.hq.anytimefileshare.model.FileBase;
 
-import android.support.v4.app.Fragment;
-
 
 public final class Global {
 	static final String LOCAL_KEY_URI = "local_uri";

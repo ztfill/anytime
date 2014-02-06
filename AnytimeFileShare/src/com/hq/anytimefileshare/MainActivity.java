@@ -1,15 +1,9 @@
 package com.hq.anytimefileshare;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
-
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -17,17 +11,12 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Spinner;
-import android.widget.Toast;
-
 
 public class MainActivity extends FragmentActivity {
 	private static FragmentManager mFm;
@@ -54,22 +43,7 @@ public class MainActivity extends FragmentActivity {
   
             public void onNothingSelected(AdapterView<?> parent) {                  
             }     
-        });  
-
-		
-		//mAdapter.add("xx"); 
-
-		/*
-		RemoteListFragment newFragment = new RemoteListFragment();
-
-	FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-		// Replace whatever is in thefragment_container view with this fragment,
-		// and add the transaction to the backstack
-		transaction.replace(R.id.mainContent,newFragment);
-	
-		//Ìá½»ÐÞ¸Ä
-		transaction.commit();	
-		*/		
+        });  	
 	}
 	
 	public boolean onCreateOptionsMenu(Menu menu) {

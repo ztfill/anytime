@@ -1,47 +1,21 @@
 package com.hq.anytimefileshare;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import com.hq.anytimefileshare.R;
 import com.hq.anytimefileshare.model.FileBase;
 import com.hq.anytimefileshare.model.LocalFile;
-import com.hq.anytimefileshare.model.RemoteFile;
-import com.hq.anytimefileshare.model.RemoteManger;
-import com.hq.anytimefileshare.model.dao.FileInfo;
-import com.hq.anytimefileshare.model.dao.RemoteInfo;
-import com.hq.anytimefileshare.ui.ActivityUI;
 import com.hq.anytimefileshare.ui.ChkListAdapter;
 
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
-import android.app.Activity;
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.app.ProgressDialog;
-import android.content.Intent;
-import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.CompoundButton.OnCheckedChangeListener;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.ImageButton;
-import android.widget.ListView;
-import android.widget.SimpleAdapter;
 import android.widget.TextView;
-import android.widget.RemoteViews;
-import android.widget.Toast;
-
-
 
 public class LocalFileListFragment extends FragmentBase {
 	String mLocalUri = null;

@@ -1,7 +1,5 @@
 package com.hq.anytimefileshare;
 
-
-import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -13,29 +11,20 @@ import com.hq.anytimefileshare.ui.ChkListAdapter;
 
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Message;
-import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.ImageButton;
-import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ListView;
 
 
@@ -141,21 +130,30 @@ public abstract class FragmentBase extends Fragment {
 		menu.add(0, ITEM_COPY, 1, R.string.copy);
 	}
 	
-	/* 响应长按menu的点击事件 */
-	public boolean onContextItemSelected(MenuItem item) {
-		AdapterContextMenuInfo info = (AdapterContextMenuInfo)item.getMenuInfo(); 
-		
-		FileInfo f = (FileInfo)mAdapter.getItem(info.position);
+	private void fileToClipboard(FileInfo f) throws Exception {
 		try {
 			String fileName = mFile.getPath() + RemoteFile.FILE_DIRECTORY_SPLITE_LABLE + f.getFileName();
 			if (f.isDirectory()) {
 				fileName += Global.DIRECTORY_SPLITE_LABLE;
 			} 				
 			
-			FileBase r = getNewFileInstance(fileName);
-			Global.removeAllClipboardFile();
+			FileBase r = getNewFileInstance(fileName);			
 			Global.addFileToClipboardFileList(r);
-			
+		} catch (Exception e) {
+			e.printStackTrace();
+			Log.e("fileToClipboard", "File to clipboard fail:" + e.getMessage());
+			throw e;
+		}
+	}
+	
+	/* 响应长按menu的点击事件 */
+	public boolean onContextItemSelected(MenuItem item) {
+		AdapterContextMenuInfo info = (AdapterContextMenuInfo)item.getMenuInfo(); 
+		
+		Global.removeAllClipboardFile();
+		FileInfo f = (FileInfo)mAdapter.getItem(info.position);
+		try {
+			fileToClipboard(f);			
 			Common.setClipboard(this);	
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -178,18 +176,13 @@ public abstract class FragmentBase extends Fragment {
 			for (int i = 0; i < list.size(); i++) {
 				int index = list.get(i);
 				FileInfo f = mFileList.get(index);
-				String fileName = mFile.getPath() + RemoteFile.FILE_DIRECTORY_SPLITE_LABLE + f.getFileName();
-				if (f.isDirectory()) {
-					fileName += RemoteFile.FILE_DIRECTORY_SPLITE_LABLE;
-				} 
-
-				FileBase r = getNewFileInstance(fileName);
-				Global.addFileToClipboardFileList(r);											
+				fileToClipboard(f);												
 			}			
 		} catch (Exception e) {
 			Global.removeAllClipboardFile();
 			e.printStackTrace();
 			Log.e("RemoteFileListFragment", "onClickCopy fail.");
+			return;
 		}
 		
 		Common.setClipboard(this);		

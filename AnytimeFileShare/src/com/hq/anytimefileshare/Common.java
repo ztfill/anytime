@@ -1,19 +1,8 @@
 package com.hq.anytimefileshare;
 
-import java.util.ArrayList;
-
-import com.hq.anytimefileshare.model.FileBase;
-import com.hq.anytimefileshare.model.RemoteFile;
-import com.hq.anytimefileshare.model.dao.FileInfo;
-import com.hq.anytimefileshare.ui.ChkListAdapter;
-
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.widget.Toast;
 

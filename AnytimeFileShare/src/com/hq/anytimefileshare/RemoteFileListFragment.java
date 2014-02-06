@@ -1,43 +1,22 @@
 package com.hq.anytimefileshare;
 
-
-import java.net.MalformedURLException;
-import java.util.ArrayList;
-import java.util.Iterator;
-
 import com.hq.anytimefileshare.R;
 import com.hq.anytimefileshare.model.FileBase;
 import com.hq.anytimefileshare.model.RemoteFile;
-import com.hq.anytimefileshare.model.dao.FileInfo;
 import com.hq.anytimefileshare.ui.ChkListAdapter;
 
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.content.Intent;
-import android.support.v4.app.Fragment;
 import android.util.Log;
-import android.view.ContextMenu;
-import android.view.ContextMenu.ContextMenuInfo;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.AdapterContextMenuInfo;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.ImageButton;
-import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.CompoundButton.OnCheckedChangeListener;
-import android.widget.ListView;
-
 
 public class RemoteFileListFragment extends FragmentBase {
 	Handler h = null;

@@ -4,15 +4,8 @@ import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
-
-import jcifs.smb.SmbException;
-import jcifs.smb.SmbFile;
-
 
 import android.util.Log;
 
@@ -20,13 +13,13 @@ import com.hq.anytimefileshare.model.dao.FileInfo;
 
 public class LocalFile extends FileBase {
 	private File mFile;
-	private BufferedOutputStream mBufOut = null;
 
 	public LocalFile(String pathName) throws Exception {
 		mFile = new File(pathName);
 		mPathName = pathName;
 		try {
-			if (isDirectory()) {
+			if (isDirectory() 
+				&& (mPathName.lastIndexOf(FILE_DIRECTORY_SPLITE_LABLE) != (mPathName.length() - 1))) {
 				mPathName += "/";
 			}
 		} catch (Exception e) {

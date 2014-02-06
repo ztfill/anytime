@@ -1,15 +1,12 @@
 package com.hq.anytimefileshare.model;
 
-
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
-import java.util.Iterator;
 
 import android.util.Log;
 
-import com.hq.anytimefileshare.Global;
 import com.hq.anytimefileshare.model.dao.FileInfo;
 
 import jcifs.smb.SmbException;
@@ -134,7 +131,6 @@ public class RemoteFile extends FileBase {
 			mSmbFile.mkdirs();
 		} catch (Exception e) {
 			Log.e("LocalFile", "mkdirs  exception:" + e.getMessage());
-			throw e;
 		}
 	}
 	

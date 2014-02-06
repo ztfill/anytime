@@ -108,12 +108,14 @@ public class RemoteManger {
 	
 		@Override
 		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+			/*
 			try {
 				db.execSQL(DATABASE_CREATE);
 			} catch (SQLException e) {
 				//throw e;
 				Log.e("DatabaseHelper", e.getMessage());
 			}
+			*/
 	
 		}
 	

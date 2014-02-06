@@ -2,7 +2,6 @@ package com.hq.anytimefileshare.ui;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 import com.hq.anytimefileshare.R;
 import com.hq.anytimefileshare.model.dao.FileInfo;

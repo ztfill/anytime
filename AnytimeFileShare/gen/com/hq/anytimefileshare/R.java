@@ -94,31 +94,33 @@ public final class R {
     }
     public static final class string {
         public static final int ProgressUnit=0x7f06000a;
-        public static final int about=0x7f060018;
+        public static final int about=0x7f060016;
         public static final int action_settings=0x7f060001;
         public static final int app_name=0x7f060000;
-        public static final int back=0x7f060012;
+        public static final int back=0x7f060011;
         public static final int cancel=0x7f06000d;
-        public static final int checkall=0x7f060014;
-        public static final int close=0x7f060013;
+        public static final int checkall=0x7f060013;
+        public static final int close=0x7f060012;
         public static final int copy=0x7f06000e;
-        public static final int copying=0x7f060010;
-        public static final int copyright=0x7f06001e;
-        public static final int delete=0x7f060011;
+        public static final int copy_fail=0x7f060026;
+        public static final int copy_sucess=0x7f060025;
+        public static final int copying=0x7f060027;
+        public static final int copyright=0x7f06001c;
+        public static final int delete=0x7f060010;
         public static final int domain=0x7f060006;
-        public static final int email=0x7f06001d;
-        public static final int exit=0x7f060019;
+        public static final int email=0x7f06001b;
+        public static final int exit=0x7f060017;
         public static final int lan=0x7f060009;
         public static final int new_connect=0x7f060002;
-        public static final int new_task=0x7f060017;
-        public static final int ok=0x7f060015;
+        public static final int new_task=0x7f060028;
+        public static final int ok=0x7f060014;
         public static final int paste=0x7f06000f;
-        public static final int prompt_choicecopy=0x7f060020;
-        public static final int prompt_choicefile=0x7f06001f;
-        public static final int prompt_copyFinish=0x7f060022;
-        public static final int prompt_delete_success=0x7f060023;
-        public static final int prompt_error_max_copynum=0x7f060024;
-        public static final int prompt_setclipboard=0x7f060021;
+        public static final int prompt_choicecopy=0x7f06001e;
+        public static final int prompt_choicefile=0x7f06001d;
+        public static final int prompt_copyFinish=0x7f060020;
+        public static final int prompt_delete_success=0x7f060021;
+        public static final int prompt_error_max_copynum=0x7f060022;
+        public static final int prompt_setclipboard=0x7f06001f;
         public static final int pwd=0x7f060005;
         public static final int remote=0x7f060003;
         public static final int remotepath=0x7f060007;
@@ -126,14 +128,14 @@ public final class R {
         public static final int sdcard=0x7f06000c;
         public static final int speedUnit=0x7f06000b;
         public static final int username=0x7f060004;
-        public static final int version=0x7f06001b;
-        public static final int warm_input_remote=0x7f060025;
-        public static final int warm_input_username=0x7f060026;
-        public static final int warn=0x7f060016;
-        public static final int weibo=0x7f06001a;
+        public static final int version=0x7f060019;
+        public static final int warm_input_remote=0x7f060023;
+        public static final int warm_input_username=0x7f060024;
+        public static final int warn=0x7f060015;
+        public static final int weibo=0x7f060018;
         /**   <string name="url">网站：<a href="http://www.hqpc.ias3.com">http://www.hqpc.ias3.com</a></string> 
          */
-        public static final int weiboURL=0x7f06001c;
+        public static final int weiboURL=0x7f06001a;
     }
     public static final class style {
         /** 

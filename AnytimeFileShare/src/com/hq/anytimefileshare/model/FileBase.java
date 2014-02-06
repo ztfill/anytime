@@ -1,15 +1,10 @@
 package com.hq.anytimefileshare.model;
 
-import java.io.BufferedOutputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
-
-import android.util.Log;
 
 import com.hq.anytimefileshare.model.dao.FileInfo;
 
@@ -81,13 +76,13 @@ public abstract class FileBase {
 			} else {	
 				int loopCountToStep = 1;
 				
-				if (getFileLen() > 0) {
-					step = (int) (Contants.MAX_BUFFER_LEN * maxStep / getFileLen());
+				if (fb.getFileLen() > 0) {
+					step = (int) (Contants.MAX_BUFFER_LEN * maxStep / fb.getFileLen());
 				} else {
 					step = maxStep;
 				}
 				if (step == 0) {
-					float f = ((float)(Contants.MAX_BUFFER_LEN * maxStep)) / (float)getFileLen();
+					float f = ((float)(Contants.MAX_BUFFER_LEN * maxStep)) / (float)fb.getFileLen();
 					step = 1;
 					loopCountToStep = (int) (step / f);
 				}

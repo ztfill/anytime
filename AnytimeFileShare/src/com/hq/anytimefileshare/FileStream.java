@@ -16,8 +16,6 @@ import android.widget.RemoteViews;
 
 import com.hq.anytimefileshare.model.FileBase;
 import com.hq.anytimefileshare.model.FileProgress;
-import com.hq.anytimefileshare.model.RemoteFile;
-import com.hq.anytimefileshare.ui.ActivityUI;
 
 public class FileStream {
 	NotificationManager mManager;  
@@ -25,6 +23,7 @@ public class FileStream {
 	static int mIndex = 0;
 	FileBase mTo;
 	Activity mActivity = null;
+	
 	
 	public boolean copyFile(Activity activity, FileBase to) {
 		mActivity = activity;
@@ -62,7 +61,7 @@ public class FileStream {
 	}
 	
 	private class CopyThread implements Runnable {
-	    String mLocalUriThread;
+	    
 	    int mNotifyIndex = NOTIFY_INDEX_INVALID;	    
 	    static final int NOTIFY_INDEX_INVALID = -1;
 	    static final int NOTIFY_INDEX_0 = 0x1;
@@ -108,17 +107,33 @@ public class FileStream {
 	    	}
 	    	return ret;
 	    }
+	    
+	    ArrayList<FileBase> cloneClipboard(ArrayList<FileBase> l) {
+	    	ArrayList<FileBase> list = new ArrayList<FileBase>();
+	    	Iterator<FileBase> it = l.iterator();
+	    	
+	    	while (it.hasNext()) {
+	    		list.add(it.next());
+	    	}
+	    	
+	    	return list;
+	    }
 		
-		void copyFile() {
-			String tip1 = "复制失败", tip2 = "";			
-			Log.i("FileListActivity", "Copy remote files to local path:" + mLocalUriThread);	
-			ArrayList<FileBase> list =  Global.getClipboardFileList();
+		void copyFile() {			
+			String tip1 = mActivity.getString(R.string.copy_fail), tip2 = "";			
+			
+			ArrayList<FileBase> list = cloneClipboard(Global.getClipboardFileList());
 			Iterator<FileBase> it = list.iterator();
 			FileProgress fp = new CopyProcess();
 			int step = Global.PROGRESS_MAX / list.size();
+			String copyUrl = null;
 			try {
+				copyUrl = mTo.getPath();
+				Log.i("FileStream.copyFile", "Copy remote files to local path:" + copyUrl);	 
 				while (it.hasNext()) {
-					FileBase from = it.next();
+					FileBase from = it.next();	
+					mNotif.contentView.setTextViewText(R.id.textCopyFile, from.getFileName()); 
+					mManager.notify(mNotifyIndex, mNotif);
 					tip2 += from.getFileName() + " ";
 					FileBase rf = mTo.getNewFileInstance(mTo.getPath() + from.getFileName());
 					rf.write(from, fp, step);
@@ -127,10 +142,10 @@ public class FileStream {
 				mNotif.contentView.setProgressBar(R.id.content_view_progress, Global.PROGRESS_MAX, Global.PROGRESS_MAX, false);  
 				mManager.notify(mNotifyIndex, mNotif); 
 				
-				tip1 = "复制成功";
+				tip1 = mActivity.getString(R.string.copy_sucess);
 			} catch (Exception e) {
-				Log.e("FileListActivity.CopyThread", "Copy to local exception:" + e.getMessage());
-				tip1 = "复制失败:" + e.getMessage();
+				Log.e("FileStream.CopyThread", "Copy to local exception:" + e.getMessage());
+				tip1 += ":" + e.getMessage();
 			} finally {
 				mManager.cancelAll();
 				PendingIntent pIntent = mNotif.contentIntent;
@@ -148,63 +163,18 @@ public class FileStream {
 				if (uiFrag != null) {
 					if (uiFrag instanceof FragmentBase) {
 						try {
-							((FragmentBase) uiFrag).updateListView();
+							FragmentBase fragb = (FragmentBase) uiFrag;							
+							if (fragb.getPath().equals(copyUrl)) {
+								fragb.updateListView();
+							}
 						} catch (Exception e) {
 							e.printStackTrace();
-							Log.e("copyFile", "update list view fail:" + e.getMessage());
+							Log.e("FileStream.copyFile", "update list view fail:" + e.getMessage());
 						}
 						
 					}
 				} 
-			}
-			
-/*			
-			
-			int step = Global.PROGRESS_MAX / mFileNameList.size();
-			String tip1 = "复制失败", tip2 = "";
-			ModelProcess mp = new CopyProcess();
-			try {					
-				for (int  i = 0; i < mFileNameList.size(); i++) {
-					//mNotif.tickerText = "正在复制：" + mFileNameList.get(i);
-					notif.contentView.setTextViewText(R.id.textCopyFile, mFileNameList.get(i)); 
-					mManager.notify(mNotifyIndex, mNotif); 
-					if (i > 0) {
-						tip2 += ",";
-					}
-					tip2 += mFileNameList.get(i);
-					RemoteFile from = new RemoteFile(mRemoteUri + mFileNameList.get(i));
-					from.copyToLocal(mLocalUriThread, mp, step);
-					
-					Activity ac = ActivityUI.getCurrentActivity();
-					if (ac instanceof LocalFileListActivity) {
-						LocalFileListActivity localAc = (LocalFileListActivity)ac;
-						if (localAc.getLocalPath() == mLocalUriThread) {
-							localAc.updateListView(mLocalUriThread);
-							// todo mLocalHandler.post(mUpdateUI);
-						}
-					}					
-				}
-				
-				mNotif.contentView.setProgressBar(R.id.content_view_progress, Global.PROGRESS_MAX, Global.PROGRESS_MAX, false);  
-				mManager.notify(mNotifyIndex, mNotif); 
-				
-				tip1 = "复制成功";
-			} catch (Exception e) {
-				Log.e("FileListActivity.CopyThread", "Copy to local exception:" + e.getMessage());
-				tip1 = "复制失败:" + e.getMessage();
-			} finally {
-				mManager.cancelAll();
-				PendingIntent pIntent = mNotif.contentIntent;
-				mNotif = new Notification(mNotif.icon, tip1, System.currentTimeMillis());
-				mNotif.tickerText = tip1;
-				mNotif.flags |= Notification.FLAG_AUTO_CANCEL;
-				
-				mNotif.setLatestEventInfo(mFrag.getActivity(), tip2, tip1, pIntent);
-				mManager.notify(mNotifyIndex, mNotif); 
-				
-				resumeNotifyIndex(mNotifyIndex);				
-			}
-	*/			
+			}		
 		}
 		
 		public void run() {
@@ -213,13 +183,16 @@ public class FileStream {
 		}
 		
 		class CopyProcess implements FileProgress {
+			private final static int mill = 1000;
 			private final static int KILO = 1024;
-			private long mCurrentTime = System.currentTimeMillis();
+			private long mLastTime = System.currentTimeMillis();
 			private int mStep = 0;
 			private long lastBytes = 0, curBytes = 0;
 			
 			CopyProcess() {	
+				mNotif.contentView.setTextViewText(R.id.textProgress, "0");
 				mNotif.contentView.setTextViewText(R.id.textSpeed, "0");
+				mManager.notify(mNotifyIndex, mNotif);
 			}
 			
 			public void writeProgress(int step, long incBytes) {
@@ -233,19 +206,20 @@ public class FileStream {
 				
 				curBytes += incBytes;
 				
-				if ((mCurrentTime + 1000) > System.currentTimeMillis()) {
+				if ((mLastTime + mill) > System.currentTimeMillis()) {
 					return;
 				}
 				
-				mCurrentTime = System.currentTimeMillis();
+				long currentTime = System.currentTimeMillis();
+				long interval = Math.abs(currentTime - mLastTime) / mill;
+				mLastTime = currentTime;
 				
-				long speed = (curBytes - lastBytes) / KILO;
+				long speed = (curBytes - lastBytes) / KILO / interval;
 				lastBytes = curBytes;
 				mNotif.contentView.setTextViewText(R.id.textProgress, String.valueOf(mStep));
 				mNotif.contentView.setTextViewText(R.id.textSpeed, String.valueOf(speed));
 				mNotif.contentView.setProgressBar(R.id.content_view_progress, Global.PROGRESS_MAX, mStep, false);  
-				mManager.notify(mNotifyIndex, mNotif); 
-	            
+				mManager.notify(mNotifyIndex, mNotif); 	            
 			}
 		}
 	}

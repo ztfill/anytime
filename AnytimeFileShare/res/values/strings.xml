@@ -21,22 +21,20 @@
     <string name="cancel">取 消</string>
     <string name="copy">复制</string>
     <string name="paste">粘贴</string>
-    <string name="copying">正在复制:</string>
     <string name="delete">删除</string>
     <string name="back">返回</string>
     <string name="close">关闭</string>
     <string name="checkall">全选</string>
     <string name="ok">确定</string>
     <string name="warn">警告</string>
-    <string name="new_task">新任务</string>
     <string name="about">关于</string>
     <string name="exit">退出</string>
     <string name="weibo">官方微博</string>
-    <string name="version">anytime文件共享 v1.0</string>
+    <string name="version">anytime文件共享 1.0.1</string>
     <!--  <string name="url">网站：<a href="http://www.hqpc.ias3.com">http://www.hqpc.ias3.com</a></string> -->
     <string name="weiboURL">微博：<a href="http://weibo.cn/xinanit">http://weibo.cn/xinanit</a></string>
     <string name="email">Email:xinanit@163.com</string>
-    <string name="copyright">Copyright © 2013-2014 恒庆网络工作室  版权所有</string>
+    <string name="copyright">Copyright © 2013&#8211;2014 恒庆网络工作室  版权所有</string>
     
     <string name="prompt_choicefile">请选择文件！</string>
     <string name="prompt_choicecopy">请先选择要复制的文件！</string>
@@ -47,4 +45,9 @@
     
     <string name="warm_input_remote">请输入远端地址</string>
     <string name="warm_input_username">请输入用户名</string>
+    
+    <string name="copy_sucess">复制成功</string>
+    <string name="copy_fail">复制失败：</string>
+    <string name="copying">正在复制：</string>
+    <string name="new_task">新任务</string>
 </resources>
